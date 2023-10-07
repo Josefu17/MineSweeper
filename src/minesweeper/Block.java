@@ -1,14 +1,16 @@
 package minesweeper;
 public class Block {
-    private int x;
-    private int y;
-    char character;
-    BlockType blockType;
-    public Block(int x, int y){
-        this.x = x;
-        this.y = y;
-        this.character = '-';
-        this.blockType = BlockType.UNKNOWN;
+    Coordinate coordinate;
+    private char character;
+    private BlockType blockType;
+
+    private final BlockType originalType;
+
+    public Block(int x, int y, BlockType type){
+        coordinate = new Coordinate(x, y);
+        character = '-';
+        blockType = BlockType.UNKNOWN;
+        originalType = type;
     }
 
     public char getCharacter(){
@@ -16,32 +18,45 @@ public class Block {
     }
 
     public void modify(BlockType blockType1){
-        switch (blockType1){
-            case MARKED: {
+        switch (blockType1) {
+            case MARKED -> {
                 character = '?';
                 blockType = BlockType.MARKED;
-                break;
-            } case MINE: {
+            }
+            case MINE -> {
                 character = '*';
                 blockType = BlockType.MINE;
-                break;
-            } case BLANK: {
+            }
+            case BLANK -> {
                 character = ' ';
                 blockType = BlockType.BLANK;
             }
+            case IN_PROGRESS -> {
+                character = 'X';
+                blockType = BlockType.IN_PROGRESS;
+            }
+            case UNKNOWN -> {
+                character = '-';
+                blockType = BlockType.UNKNOWN;
+            }
+        }
+    }
 
+    public void modify(BlockType blocktype, int i){
+        if(blocktype == BlockType.DISCOVERED){
+            character = (char)(i+48);
+            this.blockType = BlockType.DISCOVERED;
         }
     }
 
     public BlockType getBlockType() {
         return blockType;
     }
+
+    public BlockType getOriginalType() {
+        return originalType;
+    }
+
+
 }
 
-enum BlockType{
-    UNKNOWN,
-    MINE,
-    MARKED,
-    BLANK,
-    DISCOVERED
-}
