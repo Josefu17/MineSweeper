@@ -256,13 +256,17 @@ public class MineSweeper {
         world.printWorld();
         int inputX, inputY;
         System.out.println("Total mines: " + world.getMineCount() + ", Marks Left: " + world.getMarksLeft());
-        System.out.println("Enter Location please: ");
+        System.out.println("Enter Location please: (-1, -1) to end the game");
         System.out.println("x: (0 - " + (world.getRows()-1) + ")");
         inputX = scanner.nextInt();
         System.out.println("y: (0 - " + (world.getColumns()-1) +")");
         inputY = scanner.nextInt();
         Coordinate currentCoordinate = new Coordinate(inputX, inputY);
-        if(!world.isValid(currentCoordinate)){
+        if(inputX == -1 && inputY == -1){
+            lost = true;
+            return null;
+        }
+        else if(!world.isValid(currentCoordinate)){
             System.out.println("Invalid Coordinates, please make sure you enter a location that is within (0,0) and ("
                     + (world.getRows()-1) + "," + (world.getColumns()-1) + ")");
             return null;
@@ -287,7 +291,7 @@ public class MineSweeper {
      */
     private boolean result() {
         if(!worldGenerated)
-            return false;
+            return true;
         if(won){
             world.printWorld();
             System.out.println("You won!! Congrats!!!\n" +
